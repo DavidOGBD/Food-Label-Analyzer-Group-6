@@ -36,6 +36,11 @@ class OpenFoodFactsClient:
                 "Unknown Product"
             ),
 
+            "brand": product.get(
+                "brands",
+                "Unknown Brand"
+            ),
+
             "ingredients": product.get(
                 "ingredients_text",
                 "No Ingredients Found"
@@ -49,5 +54,15 @@ class OpenFoodFactsClient:
             "allergens": product.get(
                 "allergens_tags",
                 []
+            ),
+
+            "nutriscore": product.get(
+                "nutriscore_grade",
+                "N/A"
+            ),
+
+            "image_url": product.get(
+                "image_url",
+                ""
             )
         }

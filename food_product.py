@@ -1,13 +1,25 @@
 # food_product.py - Member 3: Product Model
 
 class FoodProduct:
-    def __init__(self, barcode, name, brand, ingredients, allergens, nutrition, nutriscore=None, image_url=None):
+
+    def __init__(
+        self,
+        barcode,
+        name,
+        brand,
+        ingredients,
+        allergens,
+        nutrition,
+        nutriscore=None,
+        image_url=None
+    ):
         self.barcode = barcode
         self.name = name or "Unknown Product"
         self.brand = brand or "Unknown Brand"
         self.ingredients = ingredients or "No ingredients listed."
         self.allergens = allergens or []
         self.nutrition = nutrition or {}
+        self.nutrients = self.nutrition  # Backward compatibility
         self.nutriscore = nutriscore.upper() if nutriscore else "N/A"
         self.image_url = image_url or "No image available."
 
@@ -19,7 +31,13 @@ class FoodProduct:
         return f"{self.name} by {self.brand} (Barcode: {self.barcode})"
 
     def get_nutrition_info(self):
-        calories = self.nutrition.get("energy_kcal_100g", "N/A")
+        calories = (
+            self.nutrition.get("energy-kcal_100g")
+            or self.nutrition.get("energy_kcal_100g")
+            or self.nutrition.get("energy-kcal")
+            or "N/A"
+        )
+
         return (
             f"  Calories : {calories} kcal\n"
             f"  Sugar    : {self._get_nutrient('sugars_100g')}\n"
@@ -28,7 +46,11 @@ class FoodProduct:
         )
 
     def get_allergens(self):
-        return ", ".join(self.allergens) if self.allergens else "No common allergens detected."
+        return (
+            ", ".join(self.allergens)
+            if self.allergens
+            else "No common allergens detected."
+        )
 
     def is_high_sugar(self):
         sugar = self.nutrition.get("sugars_100g")
@@ -44,10 +66,53 @@ class FoodProduct:
 
     def get_health_flags(self):
         flags = []
-        if self.is_high_sugar(): flags.append("⚠️  High in Sugar")
-        if self.is_high_fat(): flags.append("⚠️  High in Fat")
-        if self.is_high_salt(): flags.append("⚠️  High in Salt")
+
+        if self.is_high_sugar():
+            flags.append("⚠️ High in Sugar")
+
+        if self.is_high_fat():
+            flags.append("⚠️ High in Fat")
+
+        if self.is_high_salt():
+            flags.append("⚠️ High in Salt")
+
         return flags
+
+    def get_display_text(self):
+        divider = "=" * 50
+
+        output = [
+            divider,
+            "          🍽️ FOOD PRODUCT DETAILS",
+            divider,
+            f"  Product    : {self.name}",
+            f"  Brand      : {self.brand}",
+            f"  Barcode    : {self.barcode}",
+            f"  Nutri-Score: {self.nutriscore}",
+            "",
+            "📋 INGREDIENTS:",
+            f"  {self.ingredients}",
+            "",
+            "⚠️ ALLERGENS:",
+            f"  {self.get_allergens()}",
+            "",
+            "📊 NUTRITION (per 100g):",
+            self.get_nutrition_info()
+        ]
+
+        flags = self.get_health_flags()
+
+        if flags:
+            output.append("")
+            output.append("🚦 HEALTH FLAGS:")
+
+            for flag in flags:
+                output.append(f"  {flag}")
+
+   
+        output.append(divider)
+
+        return "\n".join(output)
 
     def to_dict(self):
         return {
@@ -62,36 +127,26 @@ class FoodProduct:
         }
 
     def display(self):
-        divider = "=" * 50
-        print(divider)
-        print("          🍽️  FOOD PRODUCT DETAILS")
-        print(divider)
-        print(f"  Product    : {self.name}")
-        print(f"  Brand      : {self.brand}")
-        print(f"  Barcode    : {self.barcode}")
-        print(f"  Nutri-Score: {self.nutriscore}")
-        print(f"\n📋 INGREDIENTS:\n  {self.ingredients}")
-        print(f"\n⚠️  ALLERGENS:\n  {self.get_allergens()}")
-        print(f"\n📊 NUTRITION (per 100g):\n{self.get_nutrition_info()}")
-
-        flags = self.get_health_flags()
-        if flags:
-            print("\n🚦 HEALTH FLAGS:")
-            for flag in flags: print(f"  {flag}")
-
-        print(f"\n🖼️  Image: {self.image_url}")
-        print(divider)
+        print(self.get_display_text())
 
 
 if __name__ == "__main__":
+
     product = FoodProduct(
         barcode="5000112548167",
         name="Chocolate Digestive Biscuits",
         brand="McVitie's",
         ingredients="Wheat flour, sugar, vegetable oil, cocoa powder, milk solids, soy lecithin.",
         allergens=["Milk", "Gluten", "Soy"],
-        nutrition={"energy_kcal_100g": 450, "sugars_100g": 25.0, "fat_100g": 20.0, "salt_100g": 1.8},
+        nutrition={
+            "energy_kcal_100g": 450,
+            "sugars_100g": 25.0,
+            "fat_100g": 20.0,
+            "salt_100g": 1.8
+        },
         nutriscore="d",
         image_url="https://images.openfoodfacts.org/sample.jpg"
     )
+
     product.display()
+        

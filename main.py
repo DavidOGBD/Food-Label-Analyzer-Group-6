@@ -7,6 +7,7 @@ from validators import validate_barcode
 from exceptions import InvalidBarcodeError
 from exceptions import ProductNotFoundError
 from ai_explainer import AIExplainer
+from nutrition_analyzer import NutritionAnalyzer
 
 
 def analyze_product():
@@ -39,96 +40,47 @@ def analyze_product():
             )
 
         product = FoodProduct(
-            data["name"],
-            barcode,
-            data["ingredients"],
-            data["nutrients"],
-            data["allergens"]
-        )
-
-        result.insert(
-            tkinter.END,
-            "===== PRODUCT INFORMATION =====\n\n"
-        )
-
-        result.insert(
-            tkinter.END,
-            f"Name: {product.name}\n"
-        )
-
-        result.insert(
-            tkinter.END,
-            f"Barcode: {product.barcode}\n\n"
-        )
-
-        result.insert(
-            tkinter.END,
-            f"Ingredients:\n{product.ingredients}\n\n"
-        )
-
-        result.insert(
-            tkinter.END,
-            f"Allergens:\n{product.allergens}\n\n"
-        )
-
-        nutrients = product.nutrients
-
-        sugar = nutrients.get(
-            "sugars_100g",
-            0
-        )
-
-        fat = nutrients.get(
-            "fat_100g",
-            0
-        )
-
-        salt = nutrients.get(
-            "salt_100g",
-            0
-        )
-
-        result.insert(
-            tkinter.END,
-            "===== NUTRITION ANALYSIS =====\n"
-        )
-
-        if sugar > 15:
-            result.insert(
-                tkinter.END,
-                "High Sugar\n"
+            barcode=barcode,
+            name=data["name"],
+            brand=data.get(
+                "brand",
+                "Unknown Brand"
+            ),
+            ingredients=data["ingredients"],
+            allergens=data["allergens"],
+            nutrition=data["nutrients"],
+            nutriscore=data.get(
+                "nutriscore",
+                "N/A"
+            ),
+            image_url=data.get(
+                "image_url",
+                ""
             )
-        else:
-            result.insert(
-                tkinter.END,
-                "Sugar Level Acceptable\n"
-            )
-
-        if fat > 10:
-            result.insert(
-                tkinter.END,
-                "High Fat\n"
-            )
-        else:
-            result.insert(
-                tkinter.END,
-                "Fat Level Acceptable\n"
-            )
-
-        if salt > 1:
-            result.insert(
-                tkinter.END,
-                "High Salt\n"
-            )
-        else:
-            result.insert(
-                tkinter.END,
-                "Salt Level Acceptable\n"
-            )
+        )
 
         result.insert(
             tkinter.END,
-            "\n===== AI EXPLANATION =====\n\n"
+            product.get_display_text()
+        )
+
+        result.insert(
+            tkinter.END,
+            "\n\n"
+        )
+
+        analyzer = NutritionAnalyzer(
+            product
+        )
+
+        result.insert(
+            tkinter.END,
+            analyzer.generate_nutrition_report()
+        )
+
+        result.insert(
+            tkinter.END,
+            "\n\n===== AI EXPLANATION =====\n\n"
         )
 
         try:
@@ -145,11 +97,10 @@ def analyze_product():
             )
 
         except Exception as ai_error:
-            result.insert(tkinter.END, f"AI temporarily unavailable:\n{ai_error}\n")
 
             result.insert(
                 tkinter.END,
-                f"AI Error:\n{ai_error}\n"
+                f"AI temporarily unavailable:\n{ai_error}\n"
             )
 
         result.insert(
@@ -161,7 +112,7 @@ def analyze_product():
             product.ingredients.lower()
         )
 
-        if "sugar" in ingredients:
+        if "sugar" in ingredients or "sucre" in ingredients:
 
             result.insert(
                 tkinter.END,
@@ -257,8 +208,10 @@ screen.state(
 
 heading = tkinter.Label(
     screen,
-    text="FOOD LABEL ANALYZER"
+    text="FOOD LABEL ANALYZER",
+    font=("Arial", 18, "bold")
 )
+
 heading.pack(
     pady=10
 )
@@ -266,14 +219,16 @@ heading.pack(
 frame = tkinter.Frame(
     screen
 )
+
 frame.pack(
     pady=10
 )
 
 label = tkinter.Label(
     frame,
-    text="Barcode"
+    text="Barcode:"
 )
+
 label.pack(
     side="left"
 )
@@ -282,6 +237,7 @@ ent_barcode = tkinter.Entry(
     frame,
     width=50
 )
+
 ent_barcode.pack(
     side="left",
     padx=10
@@ -292,13 +248,16 @@ button = tkinter.Button(
     text="Analyze",
     command=analyze_product
 )
+
 button.pack(
     side="left"
 )
 
 result = tkinter.Text(
-    screen
+    screen,
+    wrap="word"
 )
+
 result.pack(
     fill="both",
     expand=True,
