@@ -7,6 +7,7 @@ from validators import validate_barcode
 from exceptions import InvalidBarcodeError
 from exceptions import ProductNotFoundError
 from ai_explainer import AIExplainer
+from nutrition_analyzer import NutritionAnalyzer
 
 
 def analyze_product():
@@ -43,22 +44,34 @@ def analyze_product():
             barcode,
             data["ingredients"],
             data["nutrients"],
-            data["allergens"]
+            data["allergens"],
+            data.get("brand", "Unknown Brand"),
+            data.get("nutriscore", "N/A")
         )
 
         result.insert(
             tkinter.END,
-            "===== PRODUCT INFORMATION =====\n\n"
+            "===== FOOD PRODUCT DETAILS =====\n\n"
         )
 
         result.insert(
             tkinter.END,
-            f"Name: {product.name}\n"
+            f"Product        : {product.name}\n"
         )
 
         result.insert(
             tkinter.END,
-            f"Barcode: {product.barcode}\n\n"
+            f"Brand          : {product.brand}\n"
+        )
+
+        result.insert(
+            tkinter.END,
+            f"Barcode        : {product.barcode}\n"
+        )
+
+        result.insert(
+            tkinter.END,
+            f"Nutri-Score    : {product.nutriscore}\n\n"
         )
 
         result.insert(
@@ -71,60 +84,10 @@ def analyze_product():
             f"Allergens:\n{product.allergens}\n\n"
         )
 
-        nutrients = product.nutrients
-
-        sugar = nutrients.get(
-            "sugars_100g",
-            0
-        )
-
-        fat = nutrients.get(
-            "fat_100g",
-            0
-        )
-
-        salt = nutrients.get(
-            "salt_100g",
-            0
-        )
-
         result.insert(
             tkinter.END,
-            "===== NUTRITION ANALYSIS =====\n"
+            NutritionAnalyzer(product).generate_nutrition_report()
         )
-
-        if sugar > 15:
-            result.insert(
-                tkinter.END,
-                "High Sugar\n"
-            )
-        else:
-            result.insert(
-                tkinter.END,
-                "Sugar Level Acceptable\n"
-            )
-
-        if fat > 10:
-            result.insert(
-                tkinter.END,
-                "High Fat\n"
-            )
-        else:
-            result.insert(
-                tkinter.END,
-                "Fat Level Acceptable\n"
-            )
-
-        if salt > 1:
-            result.insert(
-                tkinter.END,
-                "High Salt\n"
-            )
-        else:
-            result.insert(
-                tkinter.END,
-                "Salt Level Acceptable\n"
-            )
 
         result.insert(
             tkinter.END,
