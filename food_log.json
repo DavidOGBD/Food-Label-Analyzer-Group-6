@@ -1,1 +1,10 @@
-[]
+[
+    {
+        "name": "Unknown Product",
+        "barcode": "123456789"
+    },
+    {
+        "name": "Coca-Cola",
+        "barcode": "5449000214911"
+    }
+]

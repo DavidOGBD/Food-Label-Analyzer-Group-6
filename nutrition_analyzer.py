@@ -100,3 +100,4 @@ class NutritionAnalyzer:
 
         return "\n".join(report_lines)
 
+

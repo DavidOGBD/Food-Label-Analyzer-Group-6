@@ -39,3 +39,4 @@ class MealSuggestionGenerator:
         for item in suggestions:
             print(f"• {item}")
 
+

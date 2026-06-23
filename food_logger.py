@@ -25,4 +25,3 @@ class FoodLogger:
             json.dump(logs, file, indent=4)
 
         print("\nFood Logged Successfully")
-

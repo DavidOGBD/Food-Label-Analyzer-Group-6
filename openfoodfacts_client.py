@@ -34,3 +34,4 @@ class OpenFoodFactsClient:
             "image_url": product.get("image_url", "")
         }
 
+

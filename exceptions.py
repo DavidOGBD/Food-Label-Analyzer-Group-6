@@ -16,4 +16,3 @@ class AIServiceError(Exception):
 class IncompleteNutritionDataError(Exception):
     def __init__(self, message="Nutrition data is incomplete or missing for this product."):
         super().__init__(message)
-

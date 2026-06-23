@@ -92,3 +92,4 @@ Please explain:
 
         explanation += "\nGENERAL ADVICE:\n- Try to eat processed foods in moderation.\n- Drink plenty of water.\n- Prefer fresh fruits and vegetables when possible.\n"
         return explanation
+    
