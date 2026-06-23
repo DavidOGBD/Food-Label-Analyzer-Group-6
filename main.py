@@ -80,6 +80,11 @@ def analyze_product():
 
         result.insert(
             tkinter.END,
+            "\n\n"
+        )
+
+        result.insert(
+            tkinter.END,
             "\n\n===== AI EXPLANATION =====\n\n"
         )
 
@@ -116,51 +121,51 @@ def analyze_product():
 
             result.insert(
                 tkinter.END,
-                "• Fruit Salad\n"
+                "- Fruit Salad\n"
             )
 
             result.insert(
                 tkinter.END,
-                "• Oatmeal\n"
+                "- Oatmeal\n"
             )
 
             result.insert(
                 tkinter.END,
-                "• Greek Yogurt\n"
+                "- Greek Yogurt\n"
             )
 
         elif "salt" in ingredients:
 
             result.insert(
                 tkinter.END,
-                "• Vegetable Soup\n"
+                "- Vegetable Soup\n"
             )
 
             result.insert(
                 tkinter.END,
-                "• Fresh Salad\n"
+                "- Fresh Salad\n"
             )
 
             result.insert(
                 tkinter.END,
-                "• Boiled Rice with Vegetables\n"
+                "- Boiled Rice with Vegetables\n"
             )
 
         else:
 
             result.insert(
                 tkinter.END,
-                "• Fresh Fruits\n"
+                "- Fresh Fruits\n"
             )
 
             result.insert(
                 tkinter.END,
-                "• Grilled Chicken\n"
+                "- Grilled Chicken\n"
             )
 
             result.insert(
                 tkinter.END,
-                "• Vegetable Stir Fry\n"
+                "- Vegetable Stir Fry\n"
             )
 
         logger = FoodLogger()

@@ -5,7 +5,6 @@ import os
 class FoodLogger:
 
     def save(self, product):
-
         filename = "food_log.json"
 
         data = {
@@ -14,7 +13,6 @@ class FoodLogger:
         }
 
         if not os.path.exists(filename):
-
             with open(filename, "w") as file:
                 json.dump([], file)
 
@@ -24,10 +22,7 @@ class FoodLogger:
         logs.append(data)
 
         with open(filename, "w") as file:
-            json.dump(
-                logs,
-                file,
-                indent=4
-            )
+            json.dump(logs, file, indent=4)
 
         print("\nFood Logged Successfully")
+

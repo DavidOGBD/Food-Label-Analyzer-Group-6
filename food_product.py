@@ -68,13 +68,13 @@ class FoodProduct:
         flags = []
 
         if self.is_high_sugar():
-            flags.append("⚠️ High in Sugar")
+            flags.append("High in Sugar")
 
         if self.is_high_fat():
-            flags.append("⚠️ High in Fat")
+            flags.append("High in Fat")
 
         if self.is_high_salt():
-            flags.append("⚠️ High in Salt")
+            flags.append("High in Salt")
 
         return flags
 
@@ -83,20 +83,20 @@ class FoodProduct:
 
         output = [
             divider,
-            "          🍽️ FOOD PRODUCT DETAILS",
+            "          FOOD PRODUCT DETAILS",
             divider,
             f"  Product    : {self.name}",
             f"  Brand      : {self.brand}",
             f"  Barcode    : {self.barcode}",
             f"  Nutri-Score: {self.nutriscore}",
             "",
-            "📋 INGREDIENTS:",
+            "INGREDIENTS:",
             f"  {self.ingredients}",
             "",
-            "⚠️ ALLERGENS:",
+            "ALLERGENS:",
             f"  {self.get_allergens()}",
             "",
-            "📊 NUTRITION (per 100g):",
+            "NUTRITION (per 100g):",
             self.get_nutrition_info()
         ]
 
@@ -104,12 +104,11 @@ class FoodProduct:
 
         if flags:
             output.append("")
-            output.append("🚦 HEALTH FLAGS:")
+            output.append("HEALTH FLAGS:")
 
             for flag in flags:
                 output.append(f"  {flag}")
 
-   
         output.append(divider)
 
         return "\n".join(output)
@@ -131,7 +130,6 @@ class FoodProduct:
 
 
 if __name__ == "__main__":
-
     product = FoodProduct(
         barcode="5000112548167",
         name="Chocolate Digestive Biscuits",
@@ -149,4 +147,4 @@ if __name__ == "__main__":
     )
 
     product.display()
-        
+
